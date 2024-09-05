@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    #root {
+        @apply h-full;
+
+        --background-color: #1f1f2e;
+        --foreground-color: #313244;
+        --border-color: #7f849c;
+        --text-color: #fff;
+        --primary-color: #7287fd;
+        --primary-hover-color: #566be2;
+    }
+
+    html,body {
+        @apply h-full;
+
+        @apply select-none;
+
+        @apply bg-[#1f1f2e];
+
+        @apply font-mono antialiased;
+
+        @apply overflow-hidden;
+    }
+}
