@@ -1,8 +1,8 @@
 import Logo from '@renderer/components/logo'
+import notify from '@renderer/utils/notifyer'
 import axios from 'axios'
 import { FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
 
 function LoginPage(): JSX.Element {
   const navigate = useNavigate()
@@ -14,14 +14,6 @@ function LoginPage(): JSX.Element {
   const clearFormAfterError = () => {
     setFormIsValid(false)
     setPassword('')
-  }
-
-  const notify = (message: string, isError: boolean) => {
-    if (isError) {
-      toast.error(message)
-    } else {
-      toast.success(message)
-    }
   }
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
