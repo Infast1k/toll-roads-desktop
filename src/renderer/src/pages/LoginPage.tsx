@@ -2,6 +2,7 @@ import Logo from '@renderer/components/logo'
 import axios from 'axios'
 import { FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 function LoginPage(): JSX.Element {
   const navigate = useNavigate()
@@ -10,15 +11,23 @@ function LoginPage(): JSX.Element {
   const [password, setPassword] = useState('')
   const [formIsValid, setFormIsValid] = useState(true)
 
-  const handleFormError = () => {
+  const clearFormAfterError = () => {
     setFormIsValid(false)
     setPassword('')
   }
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const notify = (message: string, isError: boolean) => {
+    if (isError) {
+      toast.error(message)
+    } else {
+      toast.success(message)
+    }
+  }
+
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    axios
+    await axios
       .post('http://localhost:8000/api/v1/sign-in/', {
         email: email,
         password: password
@@ -27,12 +36,25 @@ function LoginPage(): JSX.Element {
         localStorage.setItem('access_token', response.data.access_token)
         localStorage.setItem('refresh_token', response.data.refresh_token)
 
+        notify("You successfully logged in into your account", false)
         navigate('/', { replace: true })
       })
       .catch((err) => {
-        // TODO: handle errors
-        console.error(err)
-        handleFormError()
+        const errorsArray = err.response.data.errors 
+        console.log(errorsArray)
+
+        for (const errorObject of errorsArray) {
+          switch(errorObject.code) {
+            case 'invalid':
+              notify("Error: " + errorObject.detail, true)
+              break
+            default:
+              notify("Error: something went wrong", true)
+              break
+          }
+        }
+
+        clearFormAfterError()
       })
   }
 
@@ -96,6 +118,7 @@ function LoginPage(): JSX.Element {
               </p>
             </div>
           </div>
+          {/* <ToastContainer /> */}
         </div>
       </div>
     </>
