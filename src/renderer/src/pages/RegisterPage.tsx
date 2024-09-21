@@ -2,7 +2,7 @@ import Logo from '@renderer/components/logo'
 import axios from 'axios'
 import { FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import 'react-toastify/dist/ReactToastify.css'
+import { toast } from 'react-toastify'
 
 function RegisterPage(): JSX.Element {
   const navigate = useNavigate()
@@ -13,36 +13,59 @@ function RegisterPage(): JSX.Element {
   const [password1, setPassword1] = useState('')
   const [formIsValid, setFormIsValid] = useState(true)
 
-  const handleFormError = () => {
+  const clearFormAfterError = () => {
     setFormIsValid(false)
     setPassword('')
     setPassword1('')
   }
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const notify = (message: string, isError: boolean) => {
+    if (isError) {
+      toast.error(message)
+    } else {
+      toast.success(message)
+    }
+  }
+
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     if (password !== password1) {
-      handleFormError()
-      // TODO: handle errors
+      notify("Error: passwords don't match", true)
+      clearFormAfterError()
       return
     }
 
-    axios
+    await axios
       .post('http://localhost:8000/api/v1/sign-up/', {
-        name: companyName.toLowerCase(),
+        name: companyName,
         account: {
-          email: email.toLowerCase(),
-          password: password.toLowerCase()
+          email: email,
+          password: password
         }
       })
       .then(() => {
+        notify("Account was successfully created", false)
         navigate('/login', { replace: true })
       })
       .catch((err) => {
-        // TODO: handle errors
-        console.error(err)
-        handleFormError()
+        const errorsArray = err.response.data.errors 
+
+        for (const errorObject of errorsArray) {
+          switch(errorObject.code) {
+            case 'unique':
+              notify("Error: " + errorObject.detail, true)
+              break
+            case 'min_length':
+              notify("Error: password must be at least 8 characters", true)
+              break
+            default:
+              notify("Error: something went wrong", true)
+              break
+          }
+        }
+
+        clearFormAfterError()
       })
   }
 
@@ -131,6 +154,7 @@ function RegisterPage(): JSX.Element {
               </p>
             </div>
           </div>
+          {/* <ToastContainer /> */}
         </div>
       </div>
     </>
