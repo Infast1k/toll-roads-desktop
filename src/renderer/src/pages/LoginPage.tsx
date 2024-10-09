@@ -1,3 +1,4 @@
+import InputField from '@renderer/components/input_field'
 import Logo from '@renderer/components/logo'
 import notify from '@renderer/utils/notifyer'
 import axios from 'axios'
@@ -11,16 +12,16 @@ function LoginPage(): JSX.Element {
   const [password, setPassword] = useState('')
   const [formIsValid, setFormIsValid] = useState(true)
 
-  const clearFormAfterError = () => {
+  const clearFormAfterError = (): void => {
     setFormIsValid(false)
     setPassword('')
   }
 
-  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
 
     await axios
-      .post('http://localhost:8000/api/v1/sign-in/', {
+      .post('http://localhost:8000/api/v1/auth/sign-in/', {
         email: email,
         password: password
       })
@@ -28,20 +29,20 @@ function LoginPage(): JSX.Element {
         localStorage.setItem('access_token', response.data.access_token)
         localStorage.setItem('refresh_token', response.data.refresh_token)
 
-        notify("You successfully logged in into your account", false)
+        notify('You successfully logged in into your account', false)
         navigate('/', { replace: true })
       })
       .catch((err) => {
-        const errorsArray = err.response.data.errors 
+        const errorsArray = err.response.data.errors
         console.log(errorsArray)
 
         for (const errorObject of errorsArray) {
-          switch(errorObject.code) {
+          switch (errorObject.code) {
             case 'invalid':
-              notify("Error: " + errorObject.detail, true)
+              notify('Error: ' + errorObject.detail, true)
               break
             default:
-              notify("Error: something went wrong", true)
+              notify('Error: something went wrong', true)
               break
           }
         }
@@ -58,33 +59,21 @@ function LoginPage(): JSX.Element {
             <Logo height={100} width={100} />
             <h1 className="mb-7 text-center text-3xl font-medium">Sign in to account</h1>
             <form className="space-y-4" onSubmit={onSubmit}>
-              <div>
-                <label className="input-label" htmlFor="labeled-input">
-                  Email
-                </label>
-                <input
-                  className={`block input w-full rounded-sm h-8 pl-2 bg-foreground-color border-[0.5px] ${formIsValid ? 'border-border-color' : 'border-border-exception-color'} focus:border-primary-color outline-none`}
-                  type="email"
-                  id="labeled-input"
-                  onChange={(e) => setEmail(e.target.value)}
-                  value={email}
-                  required
-                />
-              </div>
+              <InputField
+                label="Email"
+                type="email"
+                value={email}
+                setValue={setEmail}
+                formIsValid={formIsValid}
+              />
               <div className="flex flex-col gap-2">
-                <div>
-                  <label className="input-label" htmlFor="labeled-input">
-                    Password
-                  </label>
-                  <input
-                    className={`block input w-full rounded-sm h-8 pl-2 bg-foreground-color border-[0.5px] ${formIsValid ? 'border-border-color' : 'border-border-exception-color'} focus:border-primary-color outline-none`}
-                    type="password"
-                    id="labeled-input"
-                    onChange={(e) => setPassword(e.target.value)}
-                    value={password}
-                    required
-                  />
-                </div>
+                <InputField
+                  label="Password"
+                  type="password"
+                  value={password}
+                  setValue={setPassword}
+                  formIsValid={formIsValid}
+                />
                 <a
                   href="#"
                   className="w-max ml-auto font-medium text-sm text-primary-color hover:text-primary-hover-color transition ease-linear"
@@ -110,7 +99,6 @@ function LoginPage(): JSX.Element {
               </p>
             </div>
           </div>
-          {/* <ToastContainer /> */}
         </div>
       </div>
     </>

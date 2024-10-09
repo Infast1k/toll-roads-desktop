@@ -1,10 +1,11 @@
+import InputField from '@renderer/components/input_field'
 import Logo from '@renderer/components/logo'
 import notify from '@renderer/utils/notifyer'
 import axios from 'axios'
-import { FormEvent, useState } from 'react'
+import React, { FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-function RegisterPage(): JSX.Element {
+const RegisterPage: React.FC = () => {
   const navigate = useNavigate()
 
   const [companyName, setCompanyName] = useState('')
@@ -13,13 +14,13 @@ function RegisterPage(): JSX.Element {
   const [password1, setPassword1] = useState('')
   const [formIsValid, setFormIsValid] = useState(true)
 
-  const clearFormAfterError = () => {
+  const clearFormAfterError = (): void => {
     setFormIsValid(false)
     setPassword('')
     setPassword1('')
   }
 
-  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
 
     if (password !== password1) {
@@ -29,7 +30,7 @@ function RegisterPage(): JSX.Element {
     }
 
     await axios
-      .post('http://localhost:8000/api/v1/sign-up/', {
+      .post('http://localhost:8000/api/v1/auth/sign-up/', {
         name: companyName,
         account: {
           email: email,
@@ -37,22 +38,22 @@ function RegisterPage(): JSX.Element {
         }
       })
       .then(() => {
-        notify("Account was successfully created", false)
+        notify('Account was successfully created', false)
         navigate('/login', { replace: true })
       })
       .catch((err) => {
-        const errorsArray = err.response.data.errors 
+        const errorsArray = err.response.data.errors
 
         for (const errorObject of errorsArray) {
-          switch(errorObject.code) {
+          switch (errorObject.code) {
             case 'unique':
-              notify("Error: " + errorObject.detail, true)
+              notify('Error: ' + errorObject.detail, true)
               break
             case 'min_length':
-              notify("Error: password must be at least 8 characters", true)
+              notify('Error: password must be at least 8 characters', true)
               break
             default:
-              notify("Error: something went wrong", true)
+              notify('Error: something went wrong', true)
               break
           }
         }
@@ -69,61 +70,37 @@ function RegisterPage(): JSX.Element {
             <Logo height={100} width={100} />
             <h1 className="mb-7 text-center text-3xl font-medium">Sign up an account</h1>
             <form className="space-y-4" onSubmit={onSubmit}>
-              <div>
-                <label className="input-label" htmlFor="labeled-input">
-                  Company name
-                </label>
-                <input
-                  className={`block input w-full rounded-sm h-8 pl-2 bg-foreground-color border-[0.5px] ${formIsValid ? 'border-border-color' : 'border-border-exception-color'} focus:border-primary-color outline-none`}
-                  type="text"
-                  id="labeled-input"
-                  onChange={(e) => setCompanyName(e.target.value)}
-                  value={companyName}
-                  required
-                />
-              </div>
-              <div>
-                <label className="input-label" htmlFor="labeled-input">
-                  Email
-                </label>
-                <input
-                  className={`block input w-full rounded-sm h-8 pl-2 bg-foreground-color border-[0.5px] ${formIsValid ? 'border-border-color' : 'border-border-exception-color'} focus:border-primary-color outline-none`}
-                  type="email"
-                  id="labeled-input"
-                  onChange={(e) => setEmail(e.target.value)}
-                  value={email}
-                  required
+              <InputField
+                label="Company name"
+                type="text"
+                value={companyName}
+                setValue={setCompanyName}
+                formIsValid={formIsValid}
+              />
+              <InputField
+                label="Email"
+                type="email"
+                value={email}
+                setValue={setEmail}
+                formIsValid={formIsValid}
+              />
+              <div className="flex flex-col gap-2">
+                <InputField
+                  label="Password"
+                  type="password"
+                  value={password}
+                  setValue={setPassword}
+                  formIsValid={formIsValid}
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <div>
-                  <label className="input-label" htmlFor="labeled-input">
-                    Password
-                  </label>
-                  <input
-                    className={`block input w-full rounded-sm h-8 pl-2 bg-foreground-color border-[0.5px] ${formIsValid ? 'border-border-color' : 'border-border-exception-color'} focus:border-primary-color outline-none`}
-                    type="password"
-                    id="labeled-input"
-                    onChange={(e) => setPassword(e.target.value)}
-                    value={password}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col gap-2">
-                <div>
-                  <label className="input-label" htmlFor="labeled-input">
-                    Repeat password
-                  </label>
-                  <input
-                    className={`block input w-full rounded-sm h-8 pl-2 bg-foreground-color border-[0.5px] ${formIsValid ? 'border-border-color' : 'border-border-exception-color'} focus:border-primary-color outline-none`}
-                    type="password"
-                    id="labeled-input"
-                    onChange={(e) => setPassword1(e.target.value)}
-                    value={password1}
-                    required
-                  />
-                </div>
+                <InputField
+                  label="Password"
+                  type="password"
+                  value={password1}
+                  setValue={setPassword1}
+                  formIsValid={formIsValid}
+                />
               </div>
               <div className="pt-6">
                 <button
@@ -146,7 +123,6 @@ function RegisterPage(): JSX.Element {
               </p>
             </div>
           </div>
-          {/* <ToastContainer /> */}
         </div>
       </div>
     </>
