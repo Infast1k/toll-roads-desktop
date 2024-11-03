@@ -24,7 +24,6 @@ function HomePage(): JSX.Element {
     <>
       {/* TODO: set header component here */}
       <RoadsTable data={some} />
-      {/* TODO: set pagination component here */}
     </>
   )
 }

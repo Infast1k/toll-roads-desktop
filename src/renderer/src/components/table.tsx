@@ -1,3 +1,5 @@
+import Pagination from "./pagination"
+
 export interface RoadProps  {
     name: string
     locations: string
@@ -30,6 +32,9 @@ const RoadsTable: React.FC<TableProps> = (props: TableProps) => {
                                 </div>
                             ))}
                         </div>	
+                    </div>
+                    <div className="justify-center items-center" >
+                        <Pagination total={props.data.length} inOnePage={5} />
                     </div>
                 </div>
             </div>
