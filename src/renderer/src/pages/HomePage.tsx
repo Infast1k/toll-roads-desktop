@@ -1,16 +1,30 @@
+import RoadsTable from "@renderer/components/table"
+
 function HomePage(): JSX.Element {
+  const some = [
+    {
+      name: "Tom",
+      locations: "1",
+      createdAt: "1"
+    },
+    {
+      name: "Dick",
+      locations: "2",
+      createdAt: "2"
+    },
+    {
+      name: "Harry",
+      locations: "3",
+      createdAt: "3"
+    }
+  ]
+  // TODO: add connection to backend
+
   return (
     <>
-      <div className="flex min-h-full flex-col justify-center text-text-color">
-        <div className="flex min-h-full flex-col justify-center px-6 lg:px-8">
-          <h1>Hello world</h1>
-          <a href="/login">LoginPage</a>
-          <a href="/register">RegisterPage</a>
-          {localStorage.getItem('access_token')}
-          <br />
-          {localStorage.getItem('refresh_token')}
-        </div>
-      </div>
+      {/* TODO: set header component here */}
+      <RoadsTable data={some} />
+      {/* TODO: set pagination component here */}
     </>
   )
 }
