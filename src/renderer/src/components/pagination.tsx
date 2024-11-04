@@ -3,6 +3,8 @@ import { useState } from "react"
 export interface PaginationProps {
     inOnePage: number
     total: number
+    offset: number
+    setOffset: React.Dispatch<React.SetStateAction<number>>
 }
 
 const Pagination: React.FC<PaginationProps> = (props: PaginationProps) => {
@@ -12,13 +14,36 @@ const Pagination: React.FC<PaginationProps> = (props: PaginationProps) => {
     const pageCount = Math.ceil(props.total / props.inOnePage)
     const [currentPage, setCurrentPage] = useState(1)
 
+    const changePage = (direction?: string) => {
+        if (direction === "next") {
+            currentPage < pageCount ? setCurrentPage(currentPage + 1) : setCurrentPage(1)
+            if (currentPage !== pageCount) {
+                props.setOffset(props.offset + props.inOnePage)
+                console.log("current page is ", currentPage)
+            } else {
+                props.setOffset(0)
+            }
+        } else if (direction === "prev") {
+            currentPage > 1 ? setCurrentPage(currentPage - 1) : setCurrentPage(pageCount)
+            if (currentPage > 1) {
+                props.setOffset(props.offset - props.inOnePage)
+                console.log("current page is ", currentPage)
+            } else {
+                props.setOffset(pageCount * props.inOnePage - props.inOnePage)
+            }
+        }
+    }
+
     const pages = Array.from({ length: pageCount }, (_, index) => {
         const page = index + 1
         return (
             <li
                 key={page}
                 className={page === currentPage ? activeStyle : defaultStyle}
-                onClick={() => setCurrentPage(page)}
+                onClick={() => {
+                    setCurrentPage(page)
+                    changePage()
+                }}
             >
                 <span>{page}</span>
             </li>
@@ -32,7 +57,7 @@ const Pagination: React.FC<PaginationProps> = (props: PaginationProps) => {
                     {pageCount > 1 ? (
                         <li
                             className="flex flex-col items-center justify-center cursor-pointer m-[0.3rem] w-[2.6rem] h-[2.6rem]"
-                            onClick={() => currentPage > 1 ? setCurrentPage(currentPage - 1) : setCurrentPage(pageCount)}
+                            onClick={() => changePage("prev")}
                         >
                             <span className="material-icons">
                                 <svg 
@@ -44,16 +69,16 @@ const Pagination: React.FC<PaginationProps> = (props: PaginationProps) => {
                                     <path 
                                         d="M19.5 12H6" 
                                         stroke="#7287fd" 
-                                        stroke-width="2" 
-                                        stroke-linecap="round" 
-                                        stroke-linejoin="round"
+                                        strokeWidth="2" 
+                                        strokeLinecap="round" 
+                                        strokeLinejoin="round"
                                     />
                                     <path 
                                         d="M11 17.5L5 12L11 6.5" 
                                         stroke="#7287fd"
-                                        stroke-width="2" 
-                                        stroke-linecap="round" 
-                                        stroke-linejoin="round"
+                                        strokeWidth="2" 
+                                        strokeLinecap="round" 
+                                        strokeLinejoin="round"
                                     />
                                 </svg>
                             </span>
@@ -65,7 +90,7 @@ const Pagination: React.FC<PaginationProps> = (props: PaginationProps) => {
                     {pageCount > 1 ? (
                         <li
                             className="flex flex-col items-center justify-center cursor-pointer m-[0.3rem] w-[2.6rem] h-[2.6rem]"
-                            onClick={() => currentPage < pageCount ? setCurrentPage(currentPage + 1) : setCurrentPage(1)}
+                            onClick={() => changePage("next")}
                         >
                             <span className="material-icons">
                                 <svg 
@@ -77,16 +102,16 @@ const Pagination: React.FC<PaginationProps> = (props: PaginationProps) => {
                                     <path 
                                         d="M18.5 12H4" 
                                         stroke="#7287fd" 
-                                        stroke-width="2"
-                                        stroke-linecap="round" 
-                                        stroke-linejoin="round"
+                                        strokeWidth="2"
+                                        strokeLinecap="round" 
+                                        strokeLinejoin="round"
                                     />
                                     <path 
                                         d="M13 6.5L18.5 12L13 17.5" 
                                         stroke="#7287fd" 
-                                        stroke-width="2" 
-                                        stroke-linecap="round" 
-                                        stroke-linejoin="round"
+                                        strokeWidth="2" 
+                                        strokeLinecap="round" 
+                                        strokeLinejoin="round"
                                     />
                                 </svg>
                             </span>
