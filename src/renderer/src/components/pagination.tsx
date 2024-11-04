@@ -14,7 +14,7 @@ const Pagination: React.FC<PaginationProps> = (props: PaginationProps) => {
     const pageCount = Math.ceil(props.total / props.inOnePage)
     const [currentPage, setCurrentPage] = useState(1)
 
-    const changePage = (direction?: string) => {
+    const changePage = (direction?: string, newPage?: number) => {
         if (direction === "next") {
             currentPage < pageCount ? setCurrentPage(currentPage + 1) : setCurrentPage(1)
             if (currentPage !== pageCount) {
@@ -32,6 +32,9 @@ const Pagination: React.FC<PaginationProps> = (props: PaginationProps) => {
                 props.setOffset(pageCount * props.inOnePage - props.inOnePage)
             }
         }
+        if (newPage) {
+            props.setOffset((newPage - 1) * props.inOnePage)
+        }
     }
 
     const pages = Array.from({ length: pageCount }, (_, index) => {
@@ -42,7 +45,7 @@ const Pagination: React.FC<PaginationProps> = (props: PaginationProps) => {
                 className={page === currentPage ? activeStyle : defaultStyle}
                 onClick={() => {
                     setCurrentPage(page)
-                    changePage()
+                    changePage("", page)
                 }}
             >
                 <span>{page}</span>
