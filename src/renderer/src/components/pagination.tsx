@@ -55,74 +55,76 @@ const Pagination: React.FC<PaginationProps> = (props: PaginationProps) => {
 
     return (
         <>
-            <div className="justify-center items-center text-text-color mt-8">
-                <ul className="list-none flex justify-center items-center h-10 mx-auto max-w-[500px] shadow-[0_0.8rem_2rem_rgba(#5a6181,0.05)] rounded-[0.5rem] bg-foreground-color">
-                    {pageCount > 1 ? (
-                        <li
-                            className="flex flex-col items-center justify-center cursor-pointer m-[0.3rem] w-[2.6rem] h-[2.6rem]"
-                            onClick={() => changePage("prev")}
-                        >
-                            <span className="material-icons">
-                                <svg 
-                                    width="24" 
-                                    height="24" 
-                                    viewBox="0 0 24 24" 
-                                    fill="none" 
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path 
-                                        d="M19.5 12H6" 
-                                        stroke="#7287fd" 
-                                        strokeWidth="2" 
-                                        strokeLinecap="round" 
-                                        strokeLinejoin="round"
-                                    />
-                                    <path 
-                                        d="M11 17.5L5 12L11 6.5" 
-                                        stroke="#7287fd"
-                                        strokeWidth="2" 
-                                        strokeLinecap="round" 
-                                        strokeLinejoin="round"
-                                    />
-                                </svg>
-                            </span>
-                        </li>
-                    ) : (
-                        <></>
-                    )}
-                    {pages}
-                    {pageCount > 1 ? (
-                        <li
-                            className="flex flex-col items-center justify-center cursor-pointer m-[0.3rem] w-[2.6rem] h-[2.6rem]"
-                            onClick={() => changePage("next")}
-                        >
-                            <span className="material-icons">
-                                <svg 
-                                    width="24" 
-                                    height="24" 
-                                    viewBox="0 0 24 24"
-                                    fill="none" 
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path 
-                                        d="M18.5 12H4" 
-                                        stroke="#7287fd" 
-                                        strokeWidth="2"
-                                        strokeLinecap="round" 
-                                        strokeLinejoin="round"
-                                    />
-                                    <path 
-                                        d="M13 6.5L18.5 12L13 17.5" 
-                                        stroke="#7287fd" 
-                                        strokeWidth="2" 
-                                        strokeLinecap="round" 
-                                        strokeLinejoin="round"
-                                    />
-                                </svg>
-                            </span>
-                        </li>
-                    ) : (
-                        <></>
-                    )}
-                </ul>
+            <div className="justify-center items-center" >
+                <div className="justify-center items-center text-text-color mt-8">
+                    <ul className="list-none flex justify-center items-center h-10 mx-auto max-w-[500px] shadow-[0_0.8rem_2rem_rgba(#5a6181,0.05)] rounded-[0.5rem] bg-foreground-color">
+                        {pageCount > 1 ? (
+                            <li
+                                className="flex flex-col items-center justify-center cursor-pointer m-[0.3rem] w-[2.6rem] h-[2.6rem]"
+                                onClick={() => changePage("prev")}
+                            >
+                                <span className="material-icons">
+                                    <svg 
+                                        width="24" 
+                                        height="24" 
+                                        viewBox="0 0 24 24" 
+                                        fill="none" 
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path 
+                                            d="M19.5 12H6" 
+                                            stroke="#7287fd" 
+                                            strokeWidth="2" 
+                                            strokeLinecap="round" 
+                                            strokeLinejoin="round"
+                                        />
+                                        <path 
+                                            d="M11 17.5L5 12L11 6.5" 
+                                            stroke="#7287fd"
+                                            strokeWidth="2" 
+                                            strokeLinecap="round" 
+                                            strokeLinejoin="round"
+                                        />
+                                    </svg>
+                                </span>
+                            </li>
+                        ) : (
+                            <></>
+                        )}
+                        {pages}
+                        {pageCount > 1 ? (
+                            <li
+                                className="flex flex-col items-center justify-center cursor-pointer m-[0.3rem] w-[2.6rem] h-[2.6rem]"
+                                onClick={() => changePage("next")}
+                            >
+                                <span className="material-icons">
+                                    <svg 
+                                        width="24" 
+                                        height="24" 
+                                        viewBox="0 0 24 24"
+                                        fill="none" 
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path 
+                                            d="M18.5 12H4" 
+                                            stroke="#7287fd" 
+                                            strokeWidth="2"
+                                            strokeLinecap="round" 
+                                            strokeLinejoin="round"
+                                        />
+                                        <path 
+                                            d="M13 6.5L18.5 12L13 17.5" 
+                                            stroke="#7287fd" 
+                                            strokeWidth="2" 
+                                            strokeLinecap="round" 
+                                            strokeLinejoin="round"
+                                        />
+                                    </svg>
+                                </span>
+                            </li>
+                        ) : (
+                            <></>
+                        )}
+                    </ul>
+                </div>
             </div>
         </>
     )

@@ -1,3 +1,4 @@
+import Pagination from "@renderer/components/pagination"
 import RoadsTable from "@renderer/components/table"
 import axios from "axios"
 import { useEffect, useState } from "react"
@@ -37,16 +38,14 @@ function HomePage(): JSX.Element {
       {/* TODO: set header component here */}
 
       { total > 0 ? (
-        <RoadsTable
-          roads={roads}
-          total={total}
-          inOnePage={limit}
-          offset={offset}
-          setOffset={setOffset}
-        />
-        // TODO: think about set pagination component here
+        <div className="max-w-[1000px] flex justify-center items-center min-h-screen mx-auto">
+          <div className="w-full">
+            <RoadsTable roads={roads} />
+            <Pagination total={total} inOnePage={limit} offset={offset} setOffset={setOffset}/>
+          </div>
+        </div>
       ) : (
-        // TODO: validate empty response
+        // TODO: validate empty response. Add button for creating new road
         <div>There are no roads</div>
       )}
     </>
